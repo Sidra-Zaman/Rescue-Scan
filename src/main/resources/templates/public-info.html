@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contacts - RescueScan</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="public-page">
+    <main class="main-content">
+        <div class="container">
+            <div class="emergency-card">
+                <div class="emergency-header">
+                    <div class="emergency-badge">Emergency Contact</div>
+                    <h1>Emergency Information</h1>
+                    <p>This person has registered with RescueScan. In case of emergency, please contact their loved ones below.</p>
+                </div>
+
+                <div class="emergency-contacts">
+                    <h2>Close Contacts</h2>
+                    <div class="emergency-contact-list">
+                        <div th:each="contact : ${contacts}" th:if="${contact.contactPhone != 'EMERGENCY'}" class="emergency-contact-item">
+                            <div class="contact-avatar">
+                                <span th:text="${#strings.substring(contact.contactName, 0, 1)}"></span>
+                            </div>
+                            <div class="contact-details">
+                                <h3 th:text="${contact.contactName}"></h3>
+                                <p class="contact-relation" th:text="${contact.relationship}"></p>
+                                <a th:href="'tel:' + ${contact.contactPhone}" class="contact-phone-link" th:text="${contact.contactPhone}"></a>
+                            </div>
+                            <a th:href="'tel:' + ${contact.contactPhone}" class="btn btn-call">Call</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="emergency-services">
+                    <h2>Emergency Services</h2>
+                    <div th:each="contact : ${contacts}" th:if="${contact.contactPhone == 'EMERGENCY'}" class="emergency-service-item">
+                        <div class="service-icon">911</div>
+                        <div class="service-details">
+                            <h3>Country Emergency Number</h3>
+                            <a th:href="'tel:' + ${contact.contactName}" class="service-phone" th:text="${contact.contactName}"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="public-footer">
+                    <p>Powered by <strong>RescueScan</strong></p>
+                    <p class="disclaimer">This information is publicly accessible for emergency purposes only.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

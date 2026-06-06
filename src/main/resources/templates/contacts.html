@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Contacts - RescueScan</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/dashboard}">RescueScan</a>
+        </div>
+        <div class="nav-links">
+            <span class="nav-user" th:text="${user.username}"></span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="btn btn-logout">Sign out</button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="contacts-card">
+                <div class="card-header">
+                    <h2>Manage Emergency Contacts</h2>
+                    <a th:href="@{/dashboard}" class="btn btn-sm btn-secondary">Back</a>
+                </div>
+
+                <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+                <form th:action="@{/dashboard/contacts/update}" method="post" class="contacts-form">
+                    <div class="contact-entries">
+                        <div th:each="contact, iterStat : ${contacts}" class="contact-entry-form">
+                            <h3 th:text="'Contact ' + ${iterStat.index + 1}"></h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label th:for="'contactName' + ${iterStat.index}">Full Name</label>
+                                    <input type="text" th:id="'contactName' + ${iterStat.index}" name="contactName" th:value="${contact.contactName}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'contactPhone' + ${iterStat.index}">Phone Number</label>
+                                    <input type="tel" th:id="'contactPhone' + ${iterStat.index}" name="contactPhone" th:value="${contact.contactPhone}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'relationship' + ${iterStat.index}">Relationship</label>
+                                    <input type="text" th:id="'relationship' + ${iterStat.index}" name="relationship" th:value="${contact.relationship}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div th:each="i : ${#numbers.sequence(#lists.size(contacts), 2)}" class="contact-entry-form">
+                            <h3 th:text="'Contact ' + (${i} + 1)"></h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label th:for="'contactName' + ${i}">Full Name</label>
+                                    <input type="text" th:id="'contactName' + ${i}" name="contactName" placeholder="Full name">
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'contactPhone' + ${i}">Phone Number</label>
+                                    <input type="tel" th:id="'contactPhone' + ${i}" name="contactPhone" placeholder="Phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="'relationship' + ${i}">Relationship</label>
+                                    <input type="text" th:id="'relationship' + ${i}" name="relationship" placeholder="e.g., Spouse, Parent">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

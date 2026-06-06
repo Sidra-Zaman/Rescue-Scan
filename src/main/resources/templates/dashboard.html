@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RescueScan</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/dashboard}">RescueScan</a>
+        </div>
+        <div class="nav-links">
+            <span class="nav-user" th:text="${user.username}"></span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="btn btn-logout">Sign out</button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+            <div class="dashboard-grid">
+                <div class="card qr-card">
+                    <div class="card-header">
+                        <h2>Your QR Code</h2>
+                    </div>
+                    <div class="card-body qr-display">
+                        <div class="qr-code-container">
+                            <img th:src="@{/dashboard/qr/image}" alt="Your QR Code" class="qr-image">
+                        </div>
+                        <div class="qr-info">
+                            <p class="qr-label">Unique Code</p>
+                            <p class="qr-code-text" th:text="${user.qrCode}"></p>
+                        </div>
+                        <div class="qr-actions">
+                            <a th:href="@{/dashboard/qr}" class="btn btn-primary">View & Print</a>
+                            <a th:href="@{/dashboard/contacts}" class="btn btn-secondary">Edit Contacts</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card contacts-card">
+                    <div class="card-header">
+                        <h2>Emergency Contacts</h2>
+                        <a th:href="@{/dashboard/contacts}" class="btn btn-sm btn-secondary">Edit</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="contacts-list">
+                            <div th:each="contact : ${contacts}" class="contact-item">
+                                <div class="contact-info">
+                                    <h4 th:text="${contact.contactName}"></h4>
+                                    <p class="contact-relationship" th:text="${contact.relationship}"></p>
+                                </div>
+                                <p class="contact-phone" th:text="${contact.contactPhone}"></p>
+                            </div>
+                            <div th:if="${#lists.isEmpty(contacts)}" class="no-contacts">
+                                <p>No contacts added yet.</p>
+                                <a th:href="@{/dashboard/setup}" class="btn btn-primary btn-sm">Add Contacts</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h2>How It Works</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">1</div>
+                        <h3>Your QR Code</h3>
+                        <p>Print your unique QR code and keep it with you on your phone, wallet, or ID card.</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">2</div>
+                        <h3>Emergency Scan</h3>
+                        <p>If you are in an emergency, anyone can scan your QR code with their phone camera.</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">3</div>
+                        <h3>Instant Access</h3>
+                        <p>They will immediately see your emergency contacts and can call them for help.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

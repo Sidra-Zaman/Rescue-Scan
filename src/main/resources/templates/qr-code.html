@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your QR Code - RescueScan</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/dashboard}">RescueScan</a>
+        </div>
+        <div class="nav-links">
+            <span class="nav-user" th:text="${user.username}"></span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="btn btn-logout">Sign out</button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="qr-print-card" id="qr-print-area">
+                <div class="print-header">
+                    <h1>RescueScan</h1>
+                </div>
+
+                <div class="print-qr-section dual-qr">
+                    <div class="qr-block">
+                        <div class="qr-label">OFFLINE QR</div>
+                        <div class="qr-label-sub">Works without internet</div>
+                        <img th:src="@{/dashboard/qr/offline-image}" alt="Offline QR Code" class="print-qr-image">
+                    </div>
+                    <div class="qr-block">
+                        <div class="qr-label">ONLINE QR</div>
+                        <div class="qr-label-sub">Full details online</div>
+                        <img th:src="@{/dashboard/qr/image}" alt="Online QR Code" class="print-qr-image">
+                    </div>
+                </div>
+
+                <div class="print-footer">
+                    <p>This QR code contains my emergency contact information</p>
+                </div>
+            </div>
+
+            <div class="print-actions no-print">
+                <button onclick="window.print()" class="btn btn-primary btn-large">Print QR Code</button>
+                <a th:href="@{/dashboard}" class="btn btn-secondary btn-large">Back to Dashboard</a>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

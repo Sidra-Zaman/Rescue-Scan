@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Profile - RescueScan</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a th:href="@{/dashboard}">RescueScan</a>
+        </div>
+        <div class="nav-links">
+            <span class="nav-user" th:text="${user.username}"></span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="btn btn-logout">Sign out</button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="setup-card">
+                <div class="setup-header">
+                    <h1>Welcome to RescueScan</h1>
+                    <p>Add your emergency contacts to generate your unique QR code.</p>
+                    <p class="section-desc" style="color: #666; font-style: italic;">Note: You will preview and confirm your information before it is saved.</p>
+                </div>
+
+                <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+                <form th:action="@{/dashboard/setup/preview}" method="post" class="setup-form">
+                    <div class="contacts-section">
+                        <h2>Emergency Contacts</h2>
+                        <p class="section-desc">Add names and phone numbers of people close to you</p>
+
+                        <div class="contact-entry">
+                            <h3>Contact 1</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName0">Full Name</label>
+                                    <input type="text" id="contactName0" name="contactName" required placeholder="Full name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactPhone0">Phone Number</label>
+                                    <input type="tel" id="contactPhone0" name="contactPhone" required placeholder="Phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="relationship0">Relationship</label>
+                                    <input type="text" id="relationship0" name="relationship" required placeholder="e.g., Spouse, Parent">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-entry">
+                            <h3>Contact 2</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName1">Full Name</label>
+                                    <input type="text" id="contactName1" name="contactName" placeholder="Full name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactPhone1">Phone Number</label>
+                                    <input type="tel" id="contactPhone1" name="contactPhone" placeholder="Phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="relationship1">Relationship</label>
+                                    <input type="text" id="relationship1" name="relationship" placeholder="e.g., Friend, Sibling">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-entry">
+                            <h3>Contact 3 (optional)</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName2">Full Name</label>
+                                    <input type="text" id="contactName2" name="contactName" placeholder="Full name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactPhone2">Phone Number</label>
+                                    <input type="tel" id="contactPhone2" name="contactPhone" placeholder="Phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="relationship2">Relationship</label>
+                                    <input type="text" id="relationship2" name="relationship" placeholder="e.g., Doctor, Neighbor">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emergency-section">
+                        <h2>Country Emergency Number</h2>
+                        <p class="section-desc">The primary emergency hotline in your country (911, 112, 999, etc.)</p>
+                        <div class="form-group">
+                            <label for="emergencyNumber">Emergency Number</label>
+                            <input type="tel" id="emergencyNumber" name="contactName" required placeholder="e.g., 911">
+                            <input type="hidden" name="contactPhone" value="EMERGENCY">
+                            <input type="hidden" name="relationship" value="Emergency Services">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">Preview & Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
