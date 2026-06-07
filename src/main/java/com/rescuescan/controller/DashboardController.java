@@ -128,8 +128,40 @@ public class DashboardController {
     @ResponseBody
     public byte[] getQrImage(Authentication authentication) throws WriterException, IOException {
         User user = userService.findByUsername(authentication.getName());
-        String url = "http://localhost:8080/qr/public/" + user.getQrCode();
-        return qrCodeService.generateQrCode(url);
+        List<EmergencyContact> contacts = contactService.getContactsByUser(user);
+
+        // Default fallback link if the user hasn't added a contact yet
+        String qrContent = "https://wa.me/?text=Emergency%20Alert";
+
+        if (contacts != null && !contacts.isEmpty()) {
+            // 1. Get the first emergency contact
+            EmergencyContact primaryContact = contacts.get(0);
+            String rawPhone = primaryContact.getContactPhone(); // Using your model's variable name
+
+            if (rawPhone != null) {
+                // 2. Clean the phone number (Strip out spaces, dashes, parentheses, or '+')
+                String cleanPhone = rawPhone.replaceAll("[^0-9]", "");
+
+                // 3. Format Pakistani local numbers to full international format (e.g., 0300 -> 92300)
+                if (cleanPhone.startsWith("0")) {
+                    cleanPhone = "92" + cleanPhone.substring(1);
+                }
+
+                // 4. Create your template message
+                String messageTemplate = "EMERGENCY NOTICE: I am scanning the Rescue Scan profile of "
+                        + user.getUsername() + ". They may require immediate medical assistance.";
+
+                // 5. URL Encode the text safely so spaces and special characters don't break the deep link
+                String encodedMessage = java.net.URLEncoder.encode(messageTemplate, java.nio.charset.StandardCharsets.UTF_8.toString())
+                        .replace("+", "%20");
+
+                // 6. Combine them into the final WhatsApp Deep Link
+                qrContent = "https://wa.me/" + cleanPhone + "?text=" + encodedMessage;
+            }
+        }
+
+        // Generate the QR matrix based on the WhatsApp deep link
+        return qrCodeService.generateQrCode(qrContent);
     }
 
     @GetMapping("/qr/offline-image")
